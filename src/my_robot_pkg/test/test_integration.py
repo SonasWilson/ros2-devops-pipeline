@@ -2,6 +2,7 @@ import rclpy
 from rclpy.node import Node
 from std_msgs.msg import String
 import unittest
+import time
 
 
 class TestROSCommunication(unittest.TestCase):
@@ -11,23 +12,28 @@ class TestROSCommunication(unittest.TestCase):
 
         node = Node("test_node")
 
-        received_messages = []
+        received = []
 
         def callback(msg):
-            received_messages.append(msg.data)
+            received.append(msg.data)
 
         pub = node.create_publisher(String, "topic", 10)
-        sub = node.create_subscription(String, "topic", callback, 10)
+        node.create_subscription(String, "topic", callback, 10)
 
         msg = String()
         msg.data = "hello_test"
 
+        # give ROS time to register subscription
+        time.sleep(0.5)
+
         pub.publish(msg)
 
-        import time
-        time.sleep(1.0)
-
-        self.assertIn("hello_test", received_messages)
+        # IMPORTANT: allow ROS to process callback
+        end_time = time.time() + 2.0
+        while time.time() < end_time:
+            rclpy.spin_once(node, timeout_sec=0.1)
 
         node.destroy_node()
         rclpy.shutdown()
+
+        self.assertIn("hello_test", received)
