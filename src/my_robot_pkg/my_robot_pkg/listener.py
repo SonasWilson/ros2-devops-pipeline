@@ -4,6 +4,8 @@ from rclpy.node import Node
 from std_msgs.msg import String
 
 # create subscriber node
+
+
 class MinimalSubscriber(Node):
 
     def __init__(self):
@@ -14,8 +16,9 @@ class MinimalSubscriber(Node):
             self.listener_callback,
             10
         )
-# uses callback instead of timer 
+# uses callback instead of timer
     # create reply message
+
     def listener_callback(self, msg):
         self.get_logger().info(f'I heard: {msg.data}')
 

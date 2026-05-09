@@ -24,8 +24,8 @@ setup(
     },
     entry_points={
         'console_scripts': [
-'talker = my_robot_pkg.talker:main',
-'listener = my_robot_pkg.listener:main',
+            'talker = my_robot_pkg.talker:main',
+            'listener = my_robot_pkg.listener:main',
         ],
     },
 )

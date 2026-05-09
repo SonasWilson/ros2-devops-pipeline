@@ -1,18 +1,19 @@
 FROM ros:humble
 
-# Install Python tools
+# Install essential tools for CI + ROS build
 RUN apt-get update && apt-get install -y \
     python3-pip \
+    python3-colcon-common-extensions \
     && rm -rf /var/lib/apt/lists/*
 
 # Create workspace inside container
 WORKDIR /ros2_ws
 
-# Copy your code into container
+# Copy only source code (important DevOps practice)
 COPY ./src ./src
 
-# Source ROS and build workspace
+# Build ROS workspace inside container
 RUN /bin/bash -c "source /opt/ros/humble/setup.bash && colcon build"
 
-# Default command when container starts
+# Default shell
 CMD ["/bin/bash"]
