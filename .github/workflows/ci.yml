@@ -39,9 +39,10 @@ jobs:
           colcon test
           colcon test-result --verbose
 
-      - name: Run integration tests
+      - name: Run ROS + Python tests
         shell: bash
         run: |
           source /opt/ros/humble/setup.bash
           source install/setup.bash
-          python3 -m pytest src/my_robot_pkg/test -q
+          colcon test
+          colcon test-result --verbose
